@@ -25,7 +25,7 @@ const int buttonPin = 6;
 
 som_flow flow = SET_TIME;
 
-const int ALL_TIME = 640;
+const int ALL_TIME = 640.0;
 int set_time = 0;
 
 int sec = 0;
@@ -73,24 +73,33 @@ void setup_time()
 void down_time()
 {
     sec = set_time - (millis()/1000 - start_time);
-    
-//    for (int r = 0; r < 8; r++)
-//    {
-//      for (int c = 0; c < 8; c++)
-//      {
-//        if (r * 8 + c > val)
-//        {
-//          lc.setLed(0, r, c, LOW);
-//        }
-//        else
-//        {
-//          lc.setLed(0, r, c, HIGH);
-//        }
-//      }
-//    }
-  
+
+    float val = (float)sec/ALL_TIME * 64;
+   
+    Serial.println(val);
     Serial.println(sec);
 
+    for (int r = 0; r < 8; r++)
+    {
+      for (int c = 0; c < 8; c++)
+      {
+        if (r * 8 + c > val)
+        {
+          lc.setLed(0, r, c, LOW);
+        }
+        else
+        {
+          lc.setLed(0, r, c, HIGH);
+        }
+      }
+    }
+  
+//    Serial.println(sec);
+
+    if (sec < 0) 
+    {
+       flow = END;
+    }
 }
 
 void end_time()
