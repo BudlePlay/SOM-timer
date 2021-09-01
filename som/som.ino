@@ -25,6 +25,12 @@ const int buttonPin = 6;
 
 som_flow flow = SET_TIME;
 
+
+int sec = 0;
+int start_time = 0;
+
+int counter =0;
+
 void setup()
 {
   Serial.begin(115200);
@@ -60,7 +66,12 @@ void set_time()
 
 void down_time()
 {
-    Serial.println("TIMER");
+    sec = millis()/1000 - start_time;
+
+ 
+  
+    Serial.println(sec);
+
 }
 
 void end_time()
@@ -74,6 +85,13 @@ void loop()
   if (flow == SET_TIME)
   {
       set_time();
+      int buttonState = digitalRead(buttonPin);
+
+      if (buttonState == 0)
+      {
+          flow = TIMER;
+          start_time = millis()/1000;
+      }
   }
   else if (flow == TIMER)
   {
@@ -84,11 +102,8 @@ void loop()
       end_time();
   }
   
-  int buttonState = digitalRead(buttonPin);
+ 
 
 
-  if (buttonState == 0)
-  {
-      flow = TIMER;
-  }
+  delay(100);
 }
