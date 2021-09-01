@@ -25,6 +25,8 @@ const int buttonPin = 6;
 
 som_flow flow = SET_TIME;
 
+const int ALL_TIME = 640;
+int set_time = 0;
 
 int sec = 0;
 int start_time = 0;
@@ -42,11 +44,15 @@ void setup()
 
 }
 
-void set_time()
+void setup_time()
 {
     int val = analogRead(A0);
+    set_time = map(val, 0, 1023, -1, ALL_TIME + 1);    // 끝까지 돌리지 않아도 ALLTIME이 되게
+    Serial.println(set_time);
+
+    
     val = map(val, 0, 1023, -1, 17) * 4;
-  
+    
     //  Serial.println(val);
     for (int r = 0; r < 8; r++)
     {
@@ -66,9 +72,22 @@ void set_time()
 
 void down_time()
 {
-    sec = millis()/1000 - start_time;
-
- 
+    sec = set_time - (millis()/1000 - start_time);
+    
+//    for (int r = 0; r < 8; r++)
+//    {
+//      for (int c = 0; c < 8; c++)
+//      {
+//        if (r * 8 + c > val)
+//        {
+//          lc.setLed(0, r, c, LOW);
+//        }
+//        else
+//        {
+//          lc.setLed(0, r, c, HIGH);
+//        }
+//      }
+//    }
   
     Serial.println(sec);
 
@@ -84,7 +103,7 @@ void loop()
 {
   if (flow == SET_TIME)
   {
-      set_time();
+      setup_time();
       int buttonState = digitalRead(buttonPin);
 
       if (buttonState == 0)
