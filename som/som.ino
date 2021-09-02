@@ -25,13 +25,13 @@ const int buttonPin = 6;
 
 som_flow flow = SET_TIME;
 
-const int ALL_TIME = 640.0;
+const int ALL_TIME = 100.0;
 int set_time = 0;
 
 int sec = 0;
 int start_time = 0;
 
-int counter =0;
+int lastVR = 0;
 
 void setup()
 {
@@ -51,7 +51,7 @@ void setup_time()
     Serial.println(set_time);
 
     
-    val = map(val, 0, 1023, -1, 17) * 4;
+    val = map(val, 0, 1023, -1, 37) * 2;
     
     //  Serial.println(val);
     for (int r = 0; r < 8; r++)
@@ -99,12 +99,20 @@ void down_time()
     if (sec < 0) 
     {
        flow = END;
+       lastVR = analogRead(A0);
     }
 }
 
 void end_time()
 {
     Serial.println("END");
+
+    int val = analogRead(A0);
+    
+    if (abs(lastVR - val) > 300)
+    {
+        flow = SET_TIME;
+    }
 }
 
 
@@ -131,7 +139,6 @@ void loop()
   }
   
  
-
 
   delay(100);
 }
