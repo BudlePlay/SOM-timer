@@ -33,6 +33,8 @@ int start_time = 0;
 
 int lastVR = 0;
 
+byte Apple [8]={B00011000,B00001000,B01110110,B11111111,B11111111,B11111111,B01111010,B00110100};
+
 void setup()
 {
   Serial.begin(115200);
@@ -113,6 +115,11 @@ void end_time()
     {
         flow = SET_TIME;
     }
+
+      for(int i=0;i<8;i++) lc.setRow(0,i,Apple[i]);
+      delay(1000);
+      lc.clearDisplay(0);
+
 }
 
 
